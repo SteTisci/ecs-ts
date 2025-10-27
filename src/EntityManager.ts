@@ -1,5 +1,12 @@
 import { ComponentName } from './types/index.js';
 
+// The EntityManager is responsible for creating and managing entities.
+//
+// Each entity is represented by a numeric ID (eid) that is incrementally assigned.
+// Removed entities are recycled to avoid ID exhaustion.
+//
+// The manager also tracks which components each entity currently has using a Map structure.
+
 export function EntityManager() {
   const entities = new Map<number, Set<ComponentName>>();
   const recicledEids: number[] = [];

@@ -1,3 +1,11 @@
+// The SparseSet is responsible for fast entity lookups, insertion and removal.
+//
+// Maintain two parallel arrays:
+// - sparse: a direct lookup table that maps an entity ID (eid) to its index in the dense array.
+// - dense: a compact array that stores all active entity IDs contiguously.
+//
+// The size rapresent the number of active entities in the set.
+
 export function SparseSet() {
   const sparse: number[] = [];
   const dense: number[] = [];
@@ -9,16 +17,12 @@ export function SparseSet() {
   }
 
   function add(eid: number) {
-    if (has(eid)) return;
-
     sparse[eid] = size;
     dense[size] = eid;
     size++;
   }
 
   function remove(eid: number) {
-    if (!has(eid)) return;
-
     const idx = sparse[eid];
     const last = dense[size - 1];
 
@@ -38,9 +42,13 @@ export function SparseSet() {
     return sparse[eid];
   }
 
-  function get(): number[] {
+  function getDense(): number[] {
     return dense.slice(0, size);
   }
 
-  return { has, add, remove, getIndex, get };
+  function getSize() {
+    return size;
+  }
+
+  return { has, add, remove, getIndex, getDense, getSize };
 }
