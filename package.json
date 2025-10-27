@@ -1,0 +1,22 @@
+{
+  "name": "ecs-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf build && tsc --build --clean && tsc",
+    "server": "npx http-server -c-1",
+    "watch": "nodemon --watch src --ext ts --exec \"npm run build\"",
+    "dev": "concurrently \"npm run watch\" \"npm run server\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1"
+  }
+}
