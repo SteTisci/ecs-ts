@@ -11,3 +11,10 @@ export interface EntityComponents {
 }
 
 export type ComponentName = keyof EntityComponents;
+
+type ComponentStores = {
+  position: ReturnType<typeof ComponentStore<Position>>;
+  velocity: ReturnType<typeof ComponentStore<Velocity>>;
+  size: ReturnType<typeof ComponentStore<Size>>;
+  sprite: ReturnType<typeof ComponentStore<Sprite>>;
+};
