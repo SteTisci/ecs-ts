@@ -57,7 +57,6 @@ export function EntityManager() {
 
   function hasComponent<T extends ComponentName>(eid: number, name: T) {
     const cid = ComponentMap.getId(name);
-
     return (bitMasks[eid] & (1 << cid)) !== 0;
   }
 
