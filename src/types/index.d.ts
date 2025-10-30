@@ -2,14 +2,26 @@ import { ComponentStore } from '../ComponentStore.js';
 
 type Position = { x: number; y: number };
 type Size = { width: number; height: number };
-type Velocity = { vx: number; vy: number };
+type Velocity = { x: number; y: number };
 type Sprite = { source: HTMLImageElement };
+type Health = { current: number; max: number };
+type Damage = { value: number };
+type LifeTime = { remaining: number };
+type Weapon = { fireRate: number; lastFired: number };
+type Input = { keys: Set<string> };
+type Hierarchy = { parent: number };
 
 export interface EntityComponents {
   position: Position;
   size: Size;
   velocity: Velocity;
   sprite: Sprite;
+  health: Health;
+  damage: Damage;
+  lifetime: LifeTime;
+  weapon: Weapon;
+  input: Input;
+  hierarchy: Hierarchy;
 }
 
 export type ComponentName = keyof EntityComponents;

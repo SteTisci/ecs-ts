@@ -1,7 +1,22 @@
 import { EntityManager } from './EntityManager.js';
 import { ComponentStore } from './ComponentStore.js';
 import { ComponentMap } from './utils/ComponentMap.js';
-import { ComponentName, StoreMap, EntityComponents, Position, Size, Sprite, Velocity, ViewResult } from './types/index.js';
+import {
+  ComponentName,
+  StoreMap,
+  EntityComponents,
+  Position,
+  Size,
+  Sprite,
+  Velocity,
+  ViewResult,
+  Health,
+  Damage,
+  LifeTime,
+  Weapon,
+  Input,
+  Hierarchy,
+} from './types/index.js';
 
 // Registry is responsible for orchestrate Entities and components opearations.
 // Every store manage a specific component using a SparseSet under the hood and SoA structure to handle the data.
@@ -14,6 +29,12 @@ export function Registry() {
     velocity: ComponentStore<Velocity>(),
     size: ComponentStore<Size>(),
     sprite: ComponentStore<Sprite>(),
+    health: ComponentStore<Health>(),
+    damage: ComponentStore<Damage>(),
+    lifetime: ComponentStore<LifeTime>(),
+    weapon: ComponentStore<Weapon>(),
+    input: ComponentStore<Input>(),
+    hierarchy: ComponentStore<Hierarchy>(),
   };
 
   function createEntity(): number {
