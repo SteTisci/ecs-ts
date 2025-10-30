@@ -1,4 +1,4 @@
-import { SparseSet } from './SparseSet.js';
+import { SparseSet } from './utils/SparseSet.js';
 
 // The ComponentStore is responsible for storing the data of a specific component type.
 // Each entity that has this component is tracked in the internal SparseSet.
@@ -11,6 +11,10 @@ import { SparseSet } from './SparseSet.js';
 export function ComponentStore<T extends Record<string, any>>() {
   const componentSet = SparseSet();
   const componentData: Record<string, any[]> = {};
+
+  function has(eid: number): boolean {
+    return componentSet.has(eid);
+  }
 
   function add(eid: number, data: T) {
     if (componentSet.has(eid)) {
@@ -54,18 +58,21 @@ export function ComponentStore<T extends Record<string, any>>() {
     }
   }
 
-  // Return the component data for the given entity
-  function get(eid: number): T | undefined {
-    if (!componentSet.has(eid)) return undefined;
+  // Direct access to raw data for high-performance iteration
+  function getRawData() {
+    return {
+      dense: componentSet.getDense(),
+      data: componentData,
+    };
+  }
 
-    const idx = componentSet.getIndex(eid);
-    const result: any = {};
+  // Get index for an entity (for direct array access)
+  function getIndex(eid: number): number {
+    return componentSet.getIndex(eid);
+  }
 
-    for (const key of Object.keys(componentData)) {
-      result[key] = componentData[key][idx];
-    }
-
-    return result as T;
+  function getSize(): number {
+    return componentSet.getSize();
   }
 
   function debug() {
@@ -73,5 +80,5 @@ export function ComponentStore<T extends Record<string, any>>() {
     console.log('Data:', componentData);
   }
 
-  return { add, remove, get, debug };
+  return { add, remove, getRawData, getIndex, has, getSize, debug };
 }

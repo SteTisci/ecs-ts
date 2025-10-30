@@ -43,10 +43,10 @@ export function SparseSet() {
   }
 
   function getDense(): number[] {
-    return dense.slice(0, size);
+    return dense;
   }
 
-  function getSize() {
+  function getSize(): number {
     return size;
   }
 
