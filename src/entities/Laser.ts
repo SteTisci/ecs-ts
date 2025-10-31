@@ -1,6 +1,7 @@
 import { Sprites } from '../assets/sprites.js';
+import { Registry } from '../Registry.js';
 
-export function createLaser(registry: any, x: number, y: number) {
+export function createLaser(registry: ReturnType<typeof Registry>, x: number, y: number): number {
   const eid = registry.createEntity();
 
   registry.addComponent(eid, 'position', { x, y });

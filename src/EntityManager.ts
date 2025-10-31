@@ -60,5 +60,9 @@ export function EntityManager() {
     return (bitMasks[eid] & (1 << cid)) !== 0;
   }
 
-  return { create, remove, addComponent, removeComponent, exists, hasComponent, bitMasks };
+  function getMask(eid: number): number {
+    return bitMasks[eid];
+  }
+
+  return { create, remove, addComponent, removeComponent, exists, hasComponent, getMask };
 }

@@ -42,7 +42,7 @@ export function Registry() {
   }
 
   function destroyEntity(eid: number) {
-    const mask = entityManager.bitMasks[eid];
+    const mask = entityManager.getMask(eid);
 
     // Direct bit manipulation instead of getComponentNames
     for (let cid = 0; cid < 32; cid++) {
@@ -68,7 +68,15 @@ export function Registry() {
   function query<T extends ComponentName[]>(...components: T): number[] {
     if (components.length === 0) return [];
 
-    // Start with the smallest set for efficiency
+    let targetMask = 0;
+
+    // Calculate target bitmask
+    for (const comp of components) {
+      const cid = ComponentMap.getId(comp);
+      targetMask |= 1 << cid;
+    }
+
+    // Find smallest store for efficiency
     let smallestStore = stores[components[0]];
     let smallestSize = smallestStore.getSize();
 
@@ -81,22 +89,13 @@ export function Registry() {
       }
     }
 
-    // Filter entities that have all required components
+    // Filter using bitmask comparison (much faster!)
     const result: number[] = [];
     const dense = smallestStore.getRawData().dense;
 
     for (const eid of dense) {
-      let hasAll = true;
-
-      for (const component of components) {
-        if (!stores[component].has(eid)) {
-          hasAll = false;
-
-          break;
-        }
-      }
-
-      if (hasAll) {
+      // Single bitwise AND operation checks all components at once
+      if ((entityManager.getMask(eid) & targetMask) === targetMask) {
         result.push(eid);
       }
     }
@@ -106,12 +105,14 @@ export function Registry() {
 
   function view<T extends ComponentName[]>(...components: T): ViewResult<T> {
     const entities = query(...components);
-
     const data = {} as ViewResult<T>['data'];
 
     for (const name of components) {
-      const store = stores[name as keyof typeof stores];
-      data[name as keyof typeof data] = store.getRawData().data;
+      const store = stores[name];
+
+      // TypeScript can't infer the exact type relationship, so i need an assertion.
+      // This code remain type safe outside the function
+      (data as any)[name] = store.getRawData().data;
     }
 
     return { entities, data };

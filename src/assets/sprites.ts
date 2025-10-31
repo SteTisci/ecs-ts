@@ -5,14 +5,20 @@ export const Sprites = {
 
 export async function loadSprites() {
   const load = (src: string) => {
-    return new Promise<HTMLImageElement>(resolve => {
+    return new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
 
       img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error(`Failed to load: ${src}`));
       img.src = src;
     });
   };
 
-  Sprites.player = await load('../PNG/playerShip1_blue.png');
-  Sprites.laserBlue = await load('../PNG/Lasers/laserBlue01.png');
+  try {
+    Sprites.player = await load('../PNG/playerShip1_blue.png');
+    Sprites.laserBlue = await load('../PNG/Lasers/laserBlue01.png');
+  } catch (error) {
+    console.error('Failed to load sprites:', error);
+    throw error;
+  }
 }

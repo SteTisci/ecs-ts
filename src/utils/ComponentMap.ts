@@ -1,8 +1,8 @@
 import { ComponentName } from '../types/index.js';
 
 function ComponentRegistry() {
-  const nameToId = new Map();
-  const idToName = new Map();
+  const nameToId = new Map<ComponentName, number>();
+  const idToName = new Map<number, ComponentName>();
   let nextId = 0;
 
   function register(name: ComponentName) {
@@ -15,18 +15,17 @@ function ComponentRegistry() {
   }
 
   function getId(name: ComponentName): number {
-    return nameToId.get(name);
+    return nameToId.get(name)!;
   }
 
   function getName(id: number): ComponentName {
-    return idToName.get(id);
+    return idToName.get(id)!;
   }
 
   return { register, getId, getName };
 }
 
-// Map every component to a number (max components = 32)
-
+// Map every component to a incremental number (max components = 32)
 export const ComponentMap = ComponentRegistry();
 
 ComponentMap.register('position');

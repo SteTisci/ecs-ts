@@ -12,7 +12,9 @@ export function RenderSystem(registry: ReturnType<typeof Registry>, ctx: CanvasR
         const w = data.size.width[i];
         const h = data.size.height[i];
 
-        ctx.drawImage(sprite, x - w / 2, y - h / 2, w, h);
+        if (sprite && sprite.complete) {
+          ctx.drawImage(sprite, x - w / 2, y - h / 2, w, h);
+        }
       }
     },
   };
