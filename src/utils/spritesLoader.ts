@@ -1,6 +1,7 @@
 export const Sprites = {
   player: null as HTMLImageElement | null,
   laserBlue: null as HTMLImageElement | null,
+  blackSky: null as HTMLImageElement | null,
 };
 
 export async function loadSprites() {
@@ -15,8 +16,9 @@ export async function loadSprites() {
   };
 
   try {
-    Sprites.player = await load('../PNG/playerShip1_blue.png');
-    Sprites.laserBlue = await load('../PNG/Lasers/laserBlue01.png');
+    Sprites.player = await load('../assets/PNG/playerShip1_blue.png');
+    Sprites.laserBlue = await load('../assets/PNG/Lasers/laserBlue01.png');
+    Sprites.blackSky = await load('../assets/backgrounds/black.png');
   } catch (error) {
     console.error('Failed to load sprites:', error);
     throw error;

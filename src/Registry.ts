@@ -9,7 +9,6 @@ import {
   Size,
   Sprite,
   Velocity,
-  ViewResult,
   Health,
   Damage,
   LifeTime,
@@ -89,7 +88,7 @@ export function Registry() {
       }
     }
 
-    // Filter using bitmask comparison (much faster!)
+    // Filter using bitmask comparison
     const result: number[] = [];
     const dense = smallestStore.getRawData().dense;
 
@@ -103,19 +102,34 @@ export function Registry() {
     return result;
   }
 
-  function view<T extends ComponentName[]>(...components: T): ViewResult<T> {
-    const entities = query(...components);
-    const data = {} as ViewResult<T>['data'];
+  function view<T extends ComponentName[]>(
+    ...components: T
+  ): {
+    ids: number[];
+    data: { [K in T[number]]: ReturnType<(typeof stores)[K]['getRawData']>['data'] };
+    indices: { [K in T[number]]: number[] };
+  } {
+    if (components.length === 0) return { ids: [], data: {}, indices: {} } as any;
 
-    for (const name of components) {
-      const store = stores[name];
+    const ids = query(...components);
+    const data: any = {};
+    const indices: any = {};
 
-      // TypeScript can't infer the exact type relationship, so i need an assertion.
-      // This code remain type safe outside the function
-      (data as any)[name] = store.getRawData().data;
+    // Prepare direct access to raw data
+    for (const comp of components) {
+      data[comp] = stores[comp].getRawData().data;
+      indices[comp] = [];
     }
 
-    return { entities, data };
+    // Construct the indices table for every component
+    for (const eid of ids) {
+      for (const comp of components) {
+        const idx = stores[comp].getIndex(eid);
+        indices[comp].push(idx);
+      }
+    }
+
+    return { ids, data, indices };
   }
 
   return { createEntity, destroyEntity, addComponent, removeComponent, stores, query, view };

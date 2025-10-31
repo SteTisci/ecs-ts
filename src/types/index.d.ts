@@ -30,13 +30,6 @@ export type StoreMap = {
   [K in ComponentName]: ReturnType<typeof ComponentStore<EntityComponents[K]>>;
 };
 
-type ViewResult<T extends ComponentName[]> = {
-  entities: number[];
-  data: {
-    [K in T[number]]: ReturnType<StoreMap[K]['getRawData']>['data'];
-  };
-};
-
 export type ComponentDataArrays<T> = {
   [K in keyof T]: T[K][];
 };
