@@ -1,8 +1,9 @@
+> [!IMPORTANT]  
+> Work in progress.
+
 # ECS in TypeScript
 
 A minimalistic game engine with zero dependencies based on the **Entity Component System (ECS)** architecture implemented in **TypeScript**
-
-> [!WARNING] Work in progress
 
 ## Features
 
