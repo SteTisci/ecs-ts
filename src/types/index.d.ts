@@ -12,16 +12,16 @@ type Input = { keys: Set<string> };
 type Hierarchy = { parent: number };
 
 export interface EntityComponents {
-  position: Position;
-  size: Size;
-  velocity: Velocity;
-  sprite: Sprite;
-  health: Health;
-  damage: Damage;
-  lifetime: LifeTime;
-  weapon: Weapon;
-  input: Input;
-  hierarchy: Hierarchy;
+  Position: Position;
+  Size: Size;
+  Velocity: Velocity;
+  Sprite: Sprite;
+  Health: Health;
+  Damage: Damage;
+  Lifetime: LifeTime;
+  Weapon: Weapon;
+  Input: Input;
+  Hierarchy: Hierarchy;
 }
 
 export type ComponentName = keyof EntityComponents;
@@ -33,3 +33,13 @@ export type StoreMap = {
 export type ComponentDataArrays<T> = {
   [K in keyof T]: T[K][];
 };
+
+export interface ViewResult<T extends ComponentName[]> {
+  eids: number[];
+  data: {
+    [K in T[number]]: ReturnType<StoreMap[K]['getRawData']>['data'];
+  };
+  idx: {
+    [K in T[number]]: number[];
+  };
+}

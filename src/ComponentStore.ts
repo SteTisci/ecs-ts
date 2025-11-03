@@ -43,7 +43,7 @@ export function ComponentStore<T extends Record<string, any>>() {
     const idx = componentSet.getIndex(eid);
     const lastIdx = componentSet.getSize() - 1;
 
-    // Check if the component is not the last entry
+    // Avoid data swap if component is already the last entry
     if (idx !== lastIdx) {
       for (const key of Object.keys(componentData)) {
         componentData[key][idx] = componentData[key][lastIdx];
@@ -66,7 +66,6 @@ export function ComponentStore<T extends Record<string, any>>() {
     };
   }
 
-  // Get index for an entity (for direct array access)
   function getIndex(eid: number): number {
     return componentSet.getIndex(eid);
   }
@@ -75,10 +74,5 @@ export function ComponentStore<T extends Record<string, any>>() {
     return componentSet.getSize();
   }
 
-  function debug() {
-    console.log('Dense:', componentSet.getDense());
-    console.log('Data:', componentData);
-  }
-
-  return { add, remove, getRawData, getIndex, has, getSize, debug };
+  return { add, remove, getRawData, getIndex, has, getSize };
 }

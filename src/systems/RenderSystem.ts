@@ -1,22 +1,20 @@
 import { Registry } from '../Registry.js';
 
-export function RenderSystem(registry: ReturnType<typeof Registry>, ctx: CanvasRenderingContext2D) {
+export function RenderSystem(registry: ReturnType<typeof Registry>) {
   return {
-    update() {
-      const { ids, data, indices } = registry.view('position', 'size', 'sprite');
-      const { position, size, sprite } = data;
-      const { position: pIdx, size: sIdx, sprite: spIdx } = indices;
+    update(ctx: CanvasRenderingContext2D) {
+      const { eids, data, idx } = registry.view('Position', 'Size', 'Sprite');
 
-      for (let i = 0; i < ids.length; i++) {
-        if (sprite.source[spIdx[i]] && sprite.source[spIdx[i]].complete) {
-          ctx.drawImage(
-            sprite.source[spIdx[i]],
-            position.x[pIdx[i]] - size.width[sIdx[i]] / 2,
-            position.y[pIdx[i]] - size.height[spIdx[i]] / 2,
-            size.width[spIdx[i]],
-            size.height[spIdx[i]],
-          );
-        }
+      for (let i = 0; i < eids.length; i++) {
+        const src = data.Sprite.source[idx.Sprite[i]];
+
+        ctx.drawImage(
+          src,
+          data.Position.x[idx.Position[i]],
+          data.Position.y[idx.Position[i]],
+          data.Size.width[idx.Size[i]],
+          data.Size.height[idx.Size[i]],
+        );
       }
     },
   };

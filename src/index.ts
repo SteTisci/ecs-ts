@@ -5,32 +5,45 @@ import { createPlayer } from './entities/Player.js';
 import { InputSystem } from './systems/InputSystem.js';
 import { MovementSystem } from './systems/MovementSystem.js';
 import { createBackground } from './entities/Background.js';
+import { createEnemy } from './entities/Enemy.js';
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 
+// Width and height of the canvas are relative to the window dimension
+const canvasWidth = (canvas.width = window.innerWidth);
+const canvasHeight = (canvas.height = window.innerHeight);
+
+// Wait for sprite loading before game start
 await loadSprites();
 
 const registry = Registry();
-const Render = RenderSystem(registry, ctx!);
+const Render = RenderSystem(registry);
 const Movement = MovementSystem(registry);
 const Input = InputSystem(registry);
 
-const BackgroundId = createBackground(registry, 600, 600);
-const PlayerId = createPlayer(registry, 275, 525);
+// Player start position offsets relative to the canvas
+const pOffsetX = 25;
+const pOffsetY = 100;
 
-document.addEventListener('keydown', event => Input.update(event.key, true));
-document.addEventListener('keyup', event => Input.update(event.key, false));
+const BackgroundId = createBackground(registry, canvasWidth, canvasHeight);
+const EnemyId = createEnemy(registry, canvasWidth / 2 - pOffsetX, pOffsetY);
+const PlayerId = createPlayer(registry, canvasWidth / 2 - pOffsetX, canvasHeight - pOffsetY);
 
-const { ids, data, indices } = registry.view('position', 'size', 'sprite');
-console.log(ids, data, indices);
+let lastTime = performance.now();
 
 function gameLoop() {
-  if (ctx) {
-    ctx.clearRect(0, 0, 600, 600);
+  const now = performance.now();
+  const deltaTime = (now - lastTime) / 1000; // Time passed
+  lastTime = now;
 
+  if (ctx) {
+    // Canvas reset
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    Input.update(deltaTime);
     Movement.update();
-    Render.update();
+    Render.update(ctx);
   }
 
   requestAnimationFrame(gameLoop);

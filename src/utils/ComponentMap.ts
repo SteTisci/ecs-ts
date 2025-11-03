@@ -28,13 +28,13 @@ function ComponentRegistry() {
 // Map every component to a incremental number (max components = 32)
 export const ComponentMap = ComponentRegistry();
 
-ComponentMap.register('position');
-ComponentMap.register('size');
-ComponentMap.register('velocity');
-ComponentMap.register('sprite');
-ComponentMap.register('health');
-ComponentMap.register('damage');
-ComponentMap.register('lifetime');
-ComponentMap.register('weapon');
-ComponentMap.register('input');
-ComponentMap.register('hierarchy');
+ComponentMap.register('Position');
+ComponentMap.register('Size');
+ComponentMap.register('Velocity');
+ComponentMap.register('Sprite');
+ComponentMap.register('Health');
+ComponentMap.register('Damage');
+ComponentMap.register('Lifetime');
+ComponentMap.register('Weapon');
+ComponentMap.register('Input');
+ComponentMap.register('Hierarchy');
