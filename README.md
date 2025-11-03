@@ -33,3 +33,7 @@ A minimalistic game engine with zero dependencies based on the **Entity Componen
 - Canvas API for rendering
 - Data oriented architecture for optimal performance
 - Functional pattern without classes
+
+## ⚖️ License
+
+MIT © 2025 SteTisci
